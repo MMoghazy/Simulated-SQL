@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+
+
+username=$(whoami)
+x=$(grep -w -c "$username" DB_ADMINS.DB)
+
+if [[ $x -eq 0 ]]
+	then
+	echo "You don't have permission to delete users"
+	else
+	cat DB_ADMINS.DB
+	echo "please enter the user you wish to delete:"
+	read user
+	if [[ $user == "ORACLE" ]]
+	then
+	echo "You can't delete the main system user"
+	else
+	cat DB_ADMINS.DB | sed "s/$user//" | sed '/^$/d' >DB_ADMINS.DB 
+	
+fi
+fi
