@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+
+
+currentuser=$(whoami)
+
+x=$(grep -w -c "$currentuser" DB_ADMINS.DB)
+
+if [[ $x -eq 0 ]]
+	then
+	echo "You don't have permission to add users"
+	else
+	echo "enter the user name:"
+	read user
+	v=$(grep -w -c "$user" DB_ADMINS.DB)
+	if [[ $v -eq 0 ]]
+	then
+	echo $user>> DB_ADMINS.DB
+	else
+	echo "this user already exist"
+fi
+fi
