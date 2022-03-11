@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+
+
+currentuser=$(whoami)
+x=$(grep -w -c "$currentuser" DB_ADMINS.DB)
+
+
+if [[ $x -eq 0 ]]
+	then
+	echo "You don't have permission to create a DB"
+	else
+	echo "Please enter the DB name:"
+	read DB
+	mkdir ./DataBases/$DB
+	touch ./DataBases/$DB/owner.txt
+	echo $currentuser >> ./DataBases/$DB/owner.txt
+fi	
