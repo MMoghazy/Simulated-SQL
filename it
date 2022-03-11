@@ -1,0 +1,70 @@
+#!/usr/bin/bash
+
+currentuser=$(whoami)
+x=$(grep -w -c "$currentuser" DB_ADMINS.DB)
+if [[ $x -eq 0 ]]
+	then
+	echo "you are not allowed to insert any data"
+	exit 1
+	else
+	ls ./DataBases
+	echo "please enter the name of the DB you want:"
+	read DB
+fi
+
+y=$(grep -w -c "$currentuser" ./DataBases/$DB/owner.txt)
+if [[ $y -eq 0 ]]
+	then
+	echo "You are not allowed to insert data in this DB"
+	exit 1
+	else
+	ls ./DataBases/$DB
+	echo "please enter the table you wish to insert data to:"
+	read table
+	head -1 ./DataBases/$DB/$table
+fi
+
+ff=$(head -1 ./DataBases/$DB/$table)
+u=1
+handle=0
+field=$(cat ./DataBases/$DB/$table | head -1 | awk -F"," '{print NF}')
+
+while [[ $field -gt 1 ]]
+	do
+	h=$(cat ./DataBases/$DB/$table | head -1 | cut -d, -f$u)
+	read -p "please enter the $h column: " input
+	awk -F"," '{print $1}' ./DataBases/$DB/$table > ./DataBases/$DB/$table.pk
+	
+	if [[ handle -eq 0 ]]
+		then
+		for i in $(cat ./DataBases/$DB/$table.pk)
+		do
+                if [[ $i == $input ]]
+			then
+			echo "this primary key already exists"
+			exit 1
+		fi
+		done 
+		input1=$input
+		else
+		input1=$input1,$input
+	fi
+	handle=$((handle+1))
+	u=$((u+1))
+	field=$((field-1))
+done
+echo $input1 >> ./DataBases/$DB/$table
+
+
+
+
+
+
+
+
+
+
+
+
+
+
