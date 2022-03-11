@@ -1,0 +1,44 @@
+#!/usr/bin/bash
+
+currentuser=$(whoami)
+x=$(grep -w -c "$currentuser" DB_ADMINS.DB)
+if [[ $x -eq 0 ]]
+        then
+        echo "you are not allowed to select any data"
+        exit 1
+        else
+        ls ./DataBases
+        echo "please enter the name of the DB you want:"
+        read DB
+fi
+
+y=$(grep -w -c "$currentuser" ./DataBases/$DB/owner.txt)
+if [[ $y -eq 0 ]]
+        then
+        echo "You are not allowed to select data from this DB"
+        exit 1
+        else
+        ls ./DataBases/$DB
+        echo "please enter the table you wish to select data from:"
+        read table
+        head -1 ./DataBases/$DB/$table
+fi
+
+echo "please choose a number :"
+echo "1-select all table"
+echo "2-select a specific row"
+read n
+if [[ $n -eq 1 ]]
+	then
+	cat ./DataBases/$DB/$table
+	else
+	echo "please enter the word you are searching for:"
+	read word
+	grep $word ./DataBases/$DB/$table
+fi
+
+
+
+
+
+
