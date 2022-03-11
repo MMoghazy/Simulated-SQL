@@ -1,0 +1,35 @@
+#!/usr/bin/bash
+
+currentuser=$(whoami)
+x=$(grep -w -c "$currentuser" DB_ADMINS.DB)
+if [[ $x -eq 0 ]]
+        then
+        echo "you are not allowed to update any data"
+        exit 1
+        else
+        ls ./DataBases
+        echo "please enter the name of the DB you want:"
+        read DB
+fi
+
+y=$(grep -w -c "$currentuser" ./DataBases/$DB/owner.txt)
+if [[ $y -eq 0 ]]
+        then
+        echo "You are not allowed to update data in this DB"
+        exit 1
+        else
+        ls ./DataBases/$DB
+        echo "please enter the table you wish to update data in:"
+        read table
+        head -1 ./DataBases/$DB/$table
+fi
+
+
+echo "please enter the word you wish to update it"
+read word
+echo "please enter the new word:"
+read update
+cat DB_ADMINS.DB | sed "s/$word/$update/" | sed '/^$/d' >DB_ADMINS.DB
+
+cat ./DataBases/$DB/$table
+
