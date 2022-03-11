@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+currentuser=$(whoami)
+x=$(grep -w -c "$currentuser" DB_ADMINS.DB)
+if [[ $x -eq 0 ]]
+	then
+	echo "YOU are not allowed to delete any DB"
+	else
+	ls ./DataBases
+	echo "Please enter the name of the DB you wish to delete:"
+	read DB
+fi
+y=$(grep -w -c "$currentuser" ./DataBases/$DB/owner.txt)
+if [[ $y -eq 0 ]]
+	then
+	echo "YOU can't delete this DB"
+	else
+	rm -r ./DataBases/$DB
+fi
