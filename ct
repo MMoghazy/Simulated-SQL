@@ -1,0 +1,44 @@
+#!/usr/bin/bash
+
+currentuser=$(whoami)
+x=$(grep -w -c "$currentuser" DB_ADMINS.DB)
+if [[ $x -eq 0 ]]
+	then
+	echo "You are not allowed to create any table"
+	exit 1
+	else
+	ls ./DataBases
+	echo "Please enter the name of the DB you want:"
+	read DB
+fi
+
+y=$(grep -w -c "$currentuser" ./DataBases/$DB/owner.txt)
+if [[ $y -eq 0 ]]
+	then
+	echo "you are not allowed to create table in this DB"
+	exit 1
+	else
+	echo "please enter the table name:"
+	read table
+	
+
+fi
+z=$(find -name $table.table)
+if [[ $z == "./DataBases/$DB/$table.table" ]]
+	then
+	echo "this table already exist"
+	exit 1
+	else
+	echo "please enter the required number of columns:"
+	read columns
+	touch ./DataBases/$DB/$table.table
+fi
+	for (( i=1;i<=$columns;i+=1 ))
+	do
+	echo "please enter column number $i:"
+	read data
+	echo -n $data"," >> ./DataBases/$DB/$table.table
+	
+done	
+echo -e "\n" >> ./DataBases/$DB/$table.table
+
